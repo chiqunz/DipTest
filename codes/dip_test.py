@@ -2,7 +2,7 @@
 
 import numpy as np
 
-def dip(samples, num_bins=100, p=0.95):
+def dip(samples, num_bins=100, p=0.95, table=True):
 
     samples = samples / np.abs(samples).max()
     pdf, idxs = np.histogram(samples, bins=num_bins)
@@ -44,11 +44,13 @@ def dip(samples, num_bins=100, p=0.95):
         idxs = idxs[xl:xr+1]
         pdf = pdf[xl:xr+1]
 
-    p_threshold = p_table(p, samples.size, 10000)
-    if ans < p_threshold:
-        check = True
+    if table:
+        p_threshold = p_table(p, samples.size, 10000)
+        if ans < p_threshold:
+            check = True
+        return ans, check
 
-    return ans, check
+    return ans
 
 
 def gcm_cal(cdf, idxs):
@@ -80,5 +82,5 @@ def sup_diff(alpha, beta, contact_points):
 
 def p_table(p, sample_size, n_samples):
     data = [np.random.randn(sample_size) for _ in range(n_samples)]
-    dips = np.hstack([dip(samples) for samples in data])
+    dips = np.hstack([dip(samples, table=False) for samples in data])
     return np.percentile(dips, p*100)

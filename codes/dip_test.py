@@ -36,6 +36,7 @@ def dip(samples, num_bins=100, p=0.95):
 
         if d <= D or xr == 0 or xl == cdf.size:
             ans = D
+            break
         else:
             D = max(D, gcm_diff_ranged, lcm_diff_ranged)
 
@@ -43,9 +44,9 @@ def dip(samples, num_bins=100, p=0.95):
         idxs = idxs[xl:xr+1]
         pdf = pdf[xl:xr+1]
 
-        p_threshold = p_table(p, samples.size, 10000)
-        if ans < p_threshold:
-            check = True
+    p_threshold = p_table(p, samples.size, 10000)
+    if ans < p_threshold:
+        check = True
 
     return ans, check
 
